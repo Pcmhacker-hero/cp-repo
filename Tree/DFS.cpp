@@ -140,7 +140,7 @@ vector<int> postorderOneStack(Node* root) {
 
     stack<Node*> st;
     Node* current = root;
-    Node* lastVisited = nullptr;
+    Node* temp = nullptr;
 
     while (current != nullptr || !st.empty()) {
 
@@ -149,22 +149,30 @@ vector<int> postorderOneStack(Node* root) {
             current = current->left;
         }
         else {
-            Node* node = st.top();
 
-            if (node->right != nullptr && lastVisited != node->right) {
-                current = node->right;
+            temp = st.top()->right;
+
+            if (temp == nullptr) {
+
+                temp = st.top();
+                st.pop();
+                ans.push_back(temp->data);
+
+                while (!st.empty() && temp == st.top()->right) {
+                    temp = st.top();
+                    st.pop();
+                    ans.push_back(temp->data);
+                }
+
             }
             else {
-                ans.push_back(node->data);
-                lastVisited = node;
-                st.pop();
+                current = temp;
             }
         }
     }
 
     return ans;
 }
-
 
 //------------------------------------------------------------
 // Utility Function
