@@ -1,4 +1,6 @@
-## Segment Tree — Range Minimum Query
+## Segment Tree — Range Minimum Query 
+
+https://www.youtube.com/live/NEG-SoyigGE?si=9AYJvLyR3XABP8tA
 
 ### Complexity
 - **Build:** `O(n)`
