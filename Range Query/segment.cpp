@@ -21,6 +21,8 @@
 ### 3. Complete Overlap
 - Current range is completely inside `[L, R]`
 - Return `seg[ind]` directly
+
+### Note : for the storing minimums we took 4 * n size array (via striver video)
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
