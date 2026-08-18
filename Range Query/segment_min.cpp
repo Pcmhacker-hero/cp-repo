@@ -55,21 +55,22 @@ public:
     }
 
     // Range Minimum Query
-    int query(int idx, int l, int r, int left, int right) {
+    // where (l,r) are the requested query and left,right are the segement boundary
+    int query(int idx, int l, int r, int left, int right) {  
 
         // No Overlap
-        if (right < l || r < left)
+        if (r < left || right < l)
             return INT_MAX;
 
         // Complete Overlap
-        if (left <= l && r <= right)
+        if (l <= left && right <= r)
             return seg[idx];
 
         // Partial Overlap
-        int mid = (l + r) / 2;
+        int mid = (left + right) / 2;
 
-        int low = query(2 * idx + 1, l, mid, left, right);
-        int high = query(2 * idx + 2, mid + 1, r, left, right);
+        int low = query(2 * idx + 1, l, r, left, mid);
+        int high = query(2 * idx + 2, l, r, mid + 1, right);
 
         return min(low, high);
     }
