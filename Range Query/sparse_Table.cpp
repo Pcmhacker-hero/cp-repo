@@ -3,6 +3,37 @@
                     SPARSE TABLE
 ==========================================================
 
+Sparse Table
+
+    Used for static range queries.
+
+    Best suited for idempotent operations:
+
+    - Minimum
+
+    - Maximum
+
+    - GCD
+
+    - Bitwise AND / OR
+
+    Time Complexity:
+
+    Build  : O(n log n)
+
+    Query  : O(1)
+
+    Space  : O(n log n)
+
+    Key idea:
+
+    Precompute answers for ranges of length 2^k.
+
+    For idempotent operations, overlapping ranges
+
+    can be combined safely.
+    -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Use:
     Range queries on a STATIC array.
 
