@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-/* TYPES  */
+/* TYPES */
 #define ll long long
 #define pii pair<int, int>
 #define pll pair<long long, long long>
@@ -59,42 +59,43 @@ typedef unsigned long long int uint64;
 //                 TOPOLOGICAL SORT
 // ========================================================
 
-// Topological Sort is possible only for a DAG
-// DAG = Directed Acyclic Graph
-
+// Topological sorting is possible only for a DAG.
+// DAG = Directed Acyclic Graph.
+// Vertices are numbered from 1 to n.
 
 // ================== DFS ==================
 // TC = O(V + E)
 // SC = O(V + E)
 
-bool helper(int node, vi adj[], vi& vis, vi& pathVis, stack<int>& st) {
+bool helper(int node, const vector<vi>& adj,
+            vi& vis, vi& pathVis, stack<int>& st) {
 
     vis[node] = 1;
     pathVis[node] = 1;
 
     for (auto it : adj[node]) {
 
-        // If node is not visited
+        // If the neighbor has not been visited
         if (!vis[it]) {
-            if (helper(it, adj, vis, pathVis, st))
+            if (helper(it, adj, vis, pathVis, st)) {
                 return true;
+            }
         }
 
-        // Node is already present in current DFS path
+        // Neighbor is already in the current DFS path
         else if (pathVis[it]) {
             return true;
         }
     }
 
     pathVis[node] = 0;
-
     st.push(node);
 
     return false;
 }
 
 
-void toposortDfs(vi adj[], int n) {
+bool toposortDfs(const vector<vi>& adj, int n, vi& ans) {
 
     stack<int> st;
 
@@ -104,20 +105,18 @@ void toposortDfs(vi adj[], int n) {
     for (int i = 1; i <= n; i++) {
 
         if (!vis[i]) {
-
             if (helper(i, adj, vis, pathVis, st)) {
-                cout << "Cycle detected\n";
-                return;
+                return false;
             }
         }
     }
 
     while (!st.empty()) {
-        cout << st.top() << " ";
+        ans.pb(st.top());
         st.pop();
     }
 
-    cout << "\n";
+    return true;
 }
 
 
@@ -125,13 +124,12 @@ void toposortDfs(vi adj[], int n) {
 // TC = O(V + E)
 // SC = O(V + E)
 
-void toposortBfs(vi adj[], int n) {
+bool toposortBfs(const vector<vi>& adj, int n, vi& ans) {
 
     vi inDegree(n + 1, 0);
 
     // Calculate indegree
     for (int i = 1; i <= n; i++) {
-
         for (auto it : adj[i]) {
             inDegree[it]++;
         }
@@ -141,13 +139,10 @@ void toposortBfs(vi adj[], int n) {
 
     // Push nodes having indegree = 0
     for (int i = 1; i <= n; i++) {
-
         if (inDegree[i] == 0) {
             qu.push(i);
         }
     }
-
-    vi ans;
 
     while (!qu.empty()) {
 
@@ -156,7 +151,7 @@ void toposortBfs(vi adj[], int n) {
 
         ans.pb(node);
 
-        // Remove node from graph
+        // Remove node from the graph
         for (auto it : adj[node]) {
 
             inDegree[it]--;
@@ -167,19 +162,8 @@ void toposortBfs(vi adj[], int n) {
         }
     }
 
-    // If all nodes are not processed,
-    // graph contains a cycle
-    if (ans.size() != n) {
-        cout << "Cycle detected\n";
-        return;
-    }
-
-    // Print topological order
-    for (auto x : ans) {
-        cout << x << " ";
-    }
-
-    cout << "\n";
+    // If not all vertices were processed, a cycle exists
+    return (int)ans.size() == n;
 }
 
 
@@ -188,26 +172,57 @@ void toposortBfs(vi adj[], int n) {
 int main() {
 
     ios::sync_with_stdio(false);
-    cin.tie(NULL);
+    cin.tie(nullptr);
 
     int n, m;
     cin >> n >> m;
 
-    vi adj[n + 1];
+    // Standard C++ adjacency list; 1-based indexing
+    vector<vi> adj(n + 1);
 
     for (int i = 0; i < m; i++) {
 
         int u, v;
         cin >> u >> v;
 
-        adj[u].push_back(v);
+        adj[u].pb(v);
     }
 
-    // DFS
-    toposortDfs(adj, n);
+    // ================== DFS ==================
 
-    // BFS / Kahn's Algorithm
-    // toposortBfs(adj, n);
+    vi ans;
+
+    if (toposortDfs(adj, n, ans)) {
+
+        for (auto node : ans) {
+            cout << node << " ";
+        }
+
+        cout << "\n";
+
+    } else {
+        cout << "Cycle detected\n";
+    }
+
+    // ================== BFS / Kahn's Algorithm ==================
+    // Uncomment this block and comment out the DFS block above
+    // if you want to use Kahn's algorithm.
+
+    /*
+    ans.clear();
+
+    if (toposortBfs(adj, n, ans)) {
+
+        for (auto node : ans) {
+            cout << node << " ";
+        }
+
+        cout << "\n";
+
+    } else {
+        cout << "Cycle detected\n";
+    }
+    */
 
     return 0;
 }
