@@ -2,7 +2,7 @@
 Dijkstra's Algorithm (Shortest Path)
 ✅ Works when:
 * Graph is weighted
-* All edge weights are non-negative/positive
+* All edge weights are positive
 * Works on both DAG and cyclic graphs
 
 Time: O((V + E) log V)
